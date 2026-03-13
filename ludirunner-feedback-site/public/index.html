@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuit du Jeu 2026</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <a href="results.html" class="logo-link" title="Voir les résultats">
+            <div class="logo">
+                <img src="./ludirunner_logo.png" alt="Logo Ludirunner" class="logo-img">
+                Nuit du Jeu 2026
+            </div>
+        </a>
+        <h1>Nuit du Jeu 2026</h1>
+    </header>
+    <main>
+        <section id="feedback-form">
+            <form id="survey">
+                <label for="overall">Appréciation globale</label>
+                <select id="overall" name="overall" required>
+                    <option value="" selected disabled>Choisir une note</option>
+                    <option value="1">1 - Très insatisfait</option>
+                    <option value="2">2 - Insatisfait</option>
+                    <option value="3">3 - Neutre</option>
+                    <option value="4">4 - Satisfait</option>
+                    <option value="5">5 - Très satisfait</option>
+                </select>
+
+                <label for="source">Comment avez-vous connu l'événement ?</label>
+                <input type="text" id="source" name="source" maxlength="120">
+
+                <label for="location">D'où venez-vous ?</label>
+                <input type="text" id="location" name="location" maxlength="120">
+
+                <label for="zones">Quelles zones de jeu avez-vous préférées ?</label>
+                <textarea id="zones" name="zones" maxlength="400"></textarea>
+
+                <label for="events">Avez-vous participé à des événements précis ? Si oui, lesquels ?</label>
+                <textarea id="events" name="events" maxlength="400"></textarea>
+
+                <label for="variety">Variété des jeux (1-5)</label>
+                <select id="variety" name="variety" required>
+                    <option value="" selected disabled>Choisir une note</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <label for="org">Appréciation de l'organisation (1-5)</label>
+                <select id="org" name="org" required>
+                    <option value="" selected disabled>Choisir une note</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+
+                <label for="helpers">Accueil et aide des bénévoles</label>
+                <textarea id="helpers" name="helpers" maxlength="400"></textarea>
+
+                <label for="hours">Les horaires</label>
+                <textarea id="hours" name="hours" maxlength="400"></textarea>
+
+                <label for="food">La restauration</label>
+                <textarea id="food" name="food" maxlength="400"></textarea>
+
+                <label for="best">Vos meilleures expériences</label>
+                <textarea id="best" name="best" maxlength="500"></textarea>
+
+                <label for="suggestions">Des suggestions ?</label>
+                <textarea id="suggestions" name="suggestions" maxlength="500"></textarea>
+
+                <button type="submit">Envoyer le retour</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        const storageKey = 'ludirunnerFeedback';
+
+        function loadFeedbacks() {
+            try {
+                const json = localStorage.getItem(storageKey);
+                const parsed = json ? JSON.parse(json) : [];
+                return Array.isArray(parsed) ? parsed : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function saveFeedbacks(list) {
+            localStorage.setItem(storageKey, JSON.stringify(list));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('survey').addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const feedbacks = loadFeedbacks();
+                feedbacks.push({
+                    overall: document.getElementById('overall').value,
+                    source: document.getElementById('source').value.trim(),
+                    location: document.getElementById('location').value.trim(),
+                    zones: document.getElementById('zones').value.trim(),
+                    events: document.getElementById('events').value.trim(),
+                    variety: document.getElementById('variety').value,
+                    org: document.getElementById('org').value,
+                    helpers: document.getElementById('helpers').value.trim(),
+                    hours: document.getElementById('hours').value.trim(),
+                    food: document.getElementById('food').value.trim(),
+                    best: document.getElementById('best').value.trim(),
+                    suggestions: document.getElementById('suggestions').value.trim(),
+                    submittedAt: new Date().toISOString()
+                });
+
+                saveFeedbacks(feedbacks);
+                event.target.reset();
+                alert('Retour envoyé !');
+            });
+        });
+    </script>
+</body>
+</html>
